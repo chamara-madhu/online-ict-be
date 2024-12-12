@@ -1,8 +1,6 @@
 const {
   create,
   findAll,
-  getGroupedPapers,
-  getPapersByExamAndMedium,
   findOne,
   update,
   remove,
@@ -29,31 +27,6 @@ exports.findAll = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-// // Get grouped papers
-// exports.getGroupedPapers = async (req, res) => {
-//   try {
-//     console.log("first");
-//     const groupedPapers = await getGroupedPapers();
-//     res.status(200).json(groupedPapers);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// // Get papers grouped by exam and medium
-// exports.getPapersByExamAndMedium = async (req, res) => {
-//   try {
-//     const { exam, medium } = req.query;
-//     const papersByExamAndMedium = await getPapersByExamAndMedium({
-//       exam,
-//       medium,
-//     });
-//     res.status(200).json(papersByExamAndMedium);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
 
 // Find a paper by ID
 exports.findOne = async (req, res) => {
