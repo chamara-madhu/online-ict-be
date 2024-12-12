@@ -59,14 +59,10 @@ class QuestionService {
     return await Question.findById(id).exec();
   }
 
-  async update(id, updateQuestionDto) {
-    const updatedQuestion = await Question.findByIdAndUpdate(
-      id,
-      updateQuestionDto,
-      {
-        new: true,
-      }
-    ).exec();
+  async update(id, data) {
+    const updatedQuestion = await Question.findByIdAndUpdate(id, data, {
+      new: true,
+    }).exec();
     return updatedQuestion;
   }
 

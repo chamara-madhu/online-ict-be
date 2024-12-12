@@ -43,6 +43,18 @@ class paymentService {
     });
     return await payment.save();
   }
+
+  async getAllMyPayments(userId) {
+    return await Payment.find({
+      user: userId,
+    }).populate("paper", "longName");
+  }
+
+  async getAllPayments() {
+    return await Payment.find()
+      .populate("paper", "longName")
+      .populate("user", "name email");
+  }
 }
 
 module.exports = new paymentService();

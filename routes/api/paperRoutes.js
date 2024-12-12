@@ -18,7 +18,7 @@ router.get("/:id", paperController.findOne);
 // Route to delete a paper
 router.delete("/:id", isAuth, isAdmin, paperController.remove);
 
-// Route to mark paper
+// Route to mark a paper (student action)
 router.post("/marks/:paperId", isAuth, isStudent, paperController.markPaper);
 
 module.exports = router;

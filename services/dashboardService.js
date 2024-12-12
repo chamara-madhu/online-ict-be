@@ -1,5 +1,5 @@
 const SeasonTicket = require("../models/paper.model");
-const User = require("../models/userModel");
+const User = require("../models/user.model");
 
 // exports.userStats = (res) => {
 //   User.aggregate([

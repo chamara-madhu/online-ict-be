@@ -42,6 +42,10 @@ class MarkService {
       .populate("user", "name")
       .limit(10);
   }
+
+  async getMyResults(userId) {
+    return await Mark.find({ user: userId }).populate("paper", "longName");
+  }
 }
 
 module.exports = new MarkService();

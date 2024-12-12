@@ -14,4 +14,10 @@ router.post(
 // create payment record
 router.post("/", isAuth, isStudent, paymentController.addPaymentRecord);
 
+// get all my payment record
+router.get("/my", isAuth, isStudent, paymentController.getAllMyPayments);
+
+// get all payment records for admin
+router.get("/", isAuth, isAdmin, paymentController.getAllPayments);
+
 module.exports = router;

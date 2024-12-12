@@ -4,6 +4,7 @@ const {
   findOne,
   getAllLessonsByPaperId,
   getHighestMarkStudentsByPaperId,
+  getMyResults,
 } = require("../services/mark.service");
 
 // Create a mark
@@ -46,6 +47,20 @@ exports.findOne = async (req, res) => {
 exports.getHighestMarkStudentsByPaperId = async (req, res) => {
   try {
     const mark = await getHighestMarkStudentsByPaperId(req.params.paperId);
+    if (mark) {
+      res.status(200).json(mark);
+    } else {
+      res.status(404).json({ message: "Marks not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// find all marks by paperId
+exports.getMyResults = async (req, res) => {
+  try {
+    const mark = await getMyResults(req.user.id);
     if (mark) {
       res.status(200).json(mark);
     } else {

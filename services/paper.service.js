@@ -29,8 +29,8 @@ class PaperService {
     return await Paper.findById(id).exec();
   }
 
-  async update(id, updatePaperDto) {
-    const updatedPaper = await Paper.findByIdAndUpdate(id, updatePaperDto, {
+  async update(id, data) {
+    const updatedPaper = await Paper.findByIdAndUpdate(id, data, {
       new: true,
     }).exec();
     return updatedPaper;

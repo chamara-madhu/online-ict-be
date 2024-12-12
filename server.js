@@ -12,6 +12,7 @@ const app = express();
 // connect database
 mongoose
   .connect("mongodb://127.0.0.1:27017/online_ict")
+  // .connect("mongodb://127.0.0.1:27017/online_ict")
   .then(() => console.log("db is running"))
   .catch((err) => console.log(err));
 
@@ -22,6 +23,7 @@ const paperRoutes = require("./routes/api/paperRoutes");
 const lessonRoutes = require("./routes/api/lessonRoutes");
 const markRoutes = require("./routes/api/markRoutes");
 const paymentRoutes = require("./routes/api/paymentRoutes");
+const userRoutes = require("./routes/api/userRoutes");
 const dashboardRoutes = require("./routes/api/dashboardRoutes");
 
 // body-parser middleware
@@ -38,6 +40,7 @@ app.use("/api/v1/papers", paperRoutes);
 app.use("/api/v1/lessons", lessonRoutes);
 app.use("/api/v1/marks", markRoutes);
 app.use("/api/v1/payments", paymentRoutes);
+app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 
 // port

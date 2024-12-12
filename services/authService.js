@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/userModel");
+const User = require("../models/user.model");
 const { secretOfKey } = require("../config/constant");
 const { USER_ROLES } = require("../config/constant");
 
@@ -23,7 +23,7 @@ exports.userLogin = async (data, res) => {
     // Generate a JWT token
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
-      secretOfKey // Ensure your secret is set in environment variables
+      secretOfKey
       // { expiresIn: "1h" } // Token expiration time
     );
 
@@ -71,7 +71,7 @@ exports.userSignUp = async (data, res) => {
     // Generate a JWT token
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email, role: newUser.role },
-      secretOfKey // Make sure to set your secret in environment variables
+      secretOfKey
       // { expiresIn: "1h" } // Token expiration time
     );
 
