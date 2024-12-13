@@ -11,10 +11,7 @@ const app = express();
 
 // connect database
 mongoose
-  .connect(mongoUrl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(mongoUrl)
   // .connect("mongodb://127.0.0.1:27017/online_ict")
   .then(() => console.log("db is running"))
   .catch((err) => console.log(err));
