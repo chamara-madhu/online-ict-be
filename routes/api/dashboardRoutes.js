@@ -5,4 +5,6 @@ const { isAuth, isAdmin } = require("../../auth-middleware/check");
 
 router.get("/stats/user", isAuth, isAdmin, dashboardController.userStats);
 
+router.get("/stats/paper", isAuth, isAdmin, dashboardController.paperStats);
+
 module.exports = router;
