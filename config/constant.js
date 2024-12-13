@@ -62,3 +62,6 @@ exports.MEDALS = {
 exports.PRICE_PER_PAPER = 200;
 exports.PROMOTION_RATE = 0.5;
 exports.CURRENCY = "LKR";
+
+exports.FREE_ATTEMPTS = 2;
+exports.PAID_ATTEMPTS = 3;

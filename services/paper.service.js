@@ -1,7 +1,13 @@
 const Paper = require("../models/paper.model");
 const Question = require("../models/question.model");
 const Mark = require("../models/mark.model");
-const { MEDALS } = require("../config/constant");
+const Payment = require("../models/payment.model");
+const {
+  MEDALS,
+  FEES,
+  PAID_ATTEMPTS,
+  FREE_ATTEMPTS,
+} = require("../config/constant");
 
 class PaperService {
   async create(data) {
@@ -92,6 +98,51 @@ class PaperService {
     return {
       id: res._id,
     };
+  }
+
+  async checkEligibility(paperId, userId) {
+    const paper = await Paper.findById(paperId).exec();
+
+    if (paper?.fee === FEES.FREE) {
+      const marks = await Mark.find({ user: userId, paper: paperId }).exec();
+
+      const remainingAttempts = FREE_ATTEMPTS - (marks?.length || 0);
+
+      if (remainingAttempts) {
+        return {
+          attemptsRemaining: remainingAttempts,
+        };
+      } else {
+        return {
+          attemptsRemaining: 0,
+        };
+      }
+    } else {
+      const payment = await Payment.find({
+        user: userId,
+        paper: paperId,
+      });
+
+      if (payment?.length) {
+        const marks = await Mark.find({ user: userId, paper: paperId }).exec();
+
+        const remainingAttempts = PAID_ATTEMPTS - (marks?.length || 0);
+
+        if (remainingAttempts) {
+          return {
+            attemptsRemaining: remainingAttempts,
+          };
+        } else {
+          return {
+            attemptsRemaining: 0,
+          };
+        }
+      } else {
+        return {
+          isNeedToBuy: true,
+        };
+      }
+    }
   }
 }
 
