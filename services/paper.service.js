@@ -89,8 +89,6 @@ class PaperService {
 
     const res = await mark.save();
 
-    console.log("res", res);
-
     return {
       id: res._id,
     };

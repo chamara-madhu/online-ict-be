@@ -6,10 +6,18 @@ const {
   remove,
   getAllLessonsByPaperId,
 } = require("../services/lesson.service");
+const { validateLesson } = require("../validators/lesson.validator");
 
 // Create a lesson
 exports.create = async (req, res) => {
   try {
+    const { isValid, errors } = validateLesson(req.body);
+
+    // If validation fails, return a 400 error
+    if (!isValid) {
+      return res.status(400).json({ message: "Validation failed", errors });
+    }
+
     const lesson = await create(req.body);
     res.status(201).json(lesson);
   } catch (error) {

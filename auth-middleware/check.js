@@ -6,12 +6,9 @@ exports.isAuth = (req, res, next) => {
   if (token) {
     token = token.split(" ")[1];
 
-    console.log("token", token);
-
     jwt.verify(token, secretOfKey, (err, user) => {
       if (!err) {
         req.user = user;
-        console.log("req.user", req.user);
         next();
       } else res.status(401).json({ error: "User access denied" });
     });

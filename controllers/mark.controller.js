@@ -1,8 +1,6 @@
 const {
   create,
-  findAll,
   findOne,
-  getAllLessonsByPaperId,
   getHighestMarkStudentsByPaperId,
   getMyResults,
 } = require("../services/mark.service");
@@ -16,17 +14,6 @@ exports.create = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-// // Find all marks with optional query parameter
-// exports.findAll = async (req, res) => {
-//   try {
-//     const exam = req.query.exam;
-//     const marks = await findAll({ exam });
-//     res.status(200).json(marks);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
 
 // Find a mark by ID
 exports.findOne = async (req, res) => {

@@ -36,7 +36,6 @@ class QuestionService {
   }
 
   async getAllQuestionsByPaperId(paperId) {
-    console.log({ paperId });
     const paper = await Paper.findOne({
       _id: paperId,
     })
@@ -49,8 +48,6 @@ class QuestionService {
       .sort({ no: 1 })
       .select("-__v -createdAt -updatedAt -answer")
       .exec();
-
-    console.log({ paper, questions });
 
     return { paper, questions };
   }

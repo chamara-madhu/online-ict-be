@@ -6,10 +6,18 @@ const {
   remove,
   markPaper,
 } = require("../services/paper.service");
+const { validatePaper } = require("../validators/paper.validator");
 
 // Create a paper
 exports.create = async (req, res) => {
   try {
+    const { isValid, errors } = validatePaper(req.body);
+
+    // If validation fails, return a 400 error
+    if (!isValid) {
+      return res.status(400).json({ message: "Validation failed", errors });
+    }
+
     const paper = await create(req.body);
     res.status(201).json(paper);
   } catch (error) {
@@ -58,7 +66,6 @@ exports.update = async (req, res) => {
 exports.remove = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("id", id);
     await remove(id);
     res.status(204).send();
   } catch (error) {

@@ -1,6 +1,6 @@
 const { findAll } = require("../services/user.service");
 
-// Find all users with optional query parameter
+// Find all users
 exports.findAll = async (req, res) => {
   try {
     const users = await findAll();

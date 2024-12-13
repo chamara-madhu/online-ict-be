@@ -5,12 +5,19 @@ const {
   findOne,
   update,
   remove,
-  markPaper,
 } = require("../services/question.service");
+const { validateQuestion } = require("../validators/question.validator");
 
 // Create a question
 exports.create = async (req, res) => {
   try {
+    const { isValid, errors } = validateQuestion(req.body);
+
+    // If validation fails, return a 400 error
+    if (!isValid) {
+      return res.status(400).json({ message: "Validation failed", errors });
+    }
+
     const question = await create(req.body);
     res.status(201).json(question);
   } catch (error) {
@@ -33,7 +40,6 @@ exports.findAll = async (req, res) => {
 exports.getAllQuestionsByPaperId = async (req, res) => {
   try {
     const paperId = req.params.paperId;
-
     const questions = await getAllQuestionsByPaperId(paperId);
     res.status(200).json(questions);
   } catch (error) {
