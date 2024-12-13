@@ -21,7 +21,9 @@ Follow the instructions below to clone the repository, install dependencies, and
    npm install
    ```
 
-3. **Install the Dependencies**
+3. **Create .env file using .env.example**
+
+4. **Install the Dependencies**
    ```bash
    npm run server
    ```

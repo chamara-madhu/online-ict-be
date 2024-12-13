@@ -5,6 +5,7 @@ const {
   update,
   remove,
   markPaper,
+  checkEligibility,
 } = require("../services/paper.service");
 const { validatePaper } = require("../validators/paper.validator");
 
@@ -80,6 +81,18 @@ exports.markPaper = async (req, res) => {
     const answers = req.body.answers;
 
     const questions = await markPaper(paperId, req.user.id, answers);
+    res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Check paper eligibility
+exports.checkEligibility = async (req, res) => {
+  try {
+    const paperId = req.params.paperId;
+
+    const questions = await checkEligibility(paperId, req.user.id);
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -21,7 +21,7 @@ class MarkService {
   }
 
   async getMyResults(userId) {
-    return await Mark.find({ user: userId }).populate("paper", "longName");
+    return await Mark.find({ user: userId }).populate("paper", "longName fee");
   }
 }
 

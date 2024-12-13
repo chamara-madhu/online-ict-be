@@ -21,4 +21,12 @@ router.delete("/:id", isAuth, isAdmin, paperController.remove);
 // Route to mark a paper (student action)
 router.post("/marks/:paperId", isAuth, isStudent, paperController.markPaper);
 
+// Check eligibility to do the paper
+router.get(
+  "/eligibility/:paperId",
+  isAuth,
+  isStudent,
+  paperController.checkEligibility
+);
+
 module.exports = router;
