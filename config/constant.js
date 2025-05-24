@@ -59,6 +59,12 @@ exports.MEDALS = {
   BRONZE: 3,
 };
 
+// is approved
+exports.IS_APPROVED_TYPES = {
+  YES: "Yes",
+  NO: "No"
+};
+
 exports.PRICE_PER_PAPER = 200;
 exports.PROMOTION_RATE = 0.5;
 exports.CURRENCY = "LKR";

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const {
   QUESTION_TYPES,
   QUESTION_DIFFICULTY_TYPES,
+  IS_APPROVED_TYPES,
 } = require("../config/constant");
 
 const questionSchema = mongoose.Schema(
@@ -49,8 +50,14 @@ const questionSchema = mongoose.Schema(
     lesson: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Lesson",
-      required: true,
+      required: false,
     },
+    isApproved: {
+      type: String,
+      enum: Object.values(IS_APPROVED_TYPES),
+      default: IS_APPROVED_TYPES.NO,
+      required: true,
+    }
   },
   {
     timestamps: true,

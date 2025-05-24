@@ -4,6 +4,7 @@ const {
   MEDIUM_TYPES,
   PAPER_TYPES,
   FEES,
+  IS_APPROVED_TYPES,
 } = require("../config/constant");
 
 const paperSchema = mongoose.Schema(
@@ -44,10 +45,12 @@ const paperSchema = mongoose.Schema(
       s: { type: Number },
       f: { type: Number },
     },
-    status: {
-      type: Boolean,
-      default: false,
-    },
+    isApproved: {
+      type: String,
+      enum: Object.values(IS_APPROVED_TYPES),
+      default: IS_APPROVED_TYPES.NO,
+      required: true,
+    }
   },
   {
     timestamps: true,

@@ -1,7 +1,14 @@
 const Question = require("../models/question.model");
 const Paper = require("../models/paper.model");
 const Lesson = require("../models/lesson.model");
+const pdfParse = require("pdf-parse");
+const mammoth = require("mammoth");
 const { mongoose } = require("mongoose");
+const { extractQuestionsFromText } = require("../utils/gptService");
+const {
+  QUESTION_TYPES,
+  QUESTION_DIFFICULTY_TYPES,
+} = require("../config/constant");
 
 class QuestionService {
   async create(data) {
@@ -15,6 +22,60 @@ class QuestionService {
     if (lesson) question.lesson = lesson;
 
     return await question.save();
+  }
+
+  async scan(paperId, file) {
+    let text = "";
+
+    if (file.mimetype === "application/pdf") {
+      const data = await pdfParse(file.buffer);
+      text = data.text;
+    } else if (
+      file.mimetype ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      const result = await mammoth.extractRawText({ buffer: file.buffer });
+      text = result.value;
+    } else {
+      return res.status(400).json({ error: "Unsupported file type" });
+    }
+
+    console.log("text", text);
+
+    // const result = await extractQuestionsFromText(file.buffer.toString('base64'));
+    const result = await extractQuestionsFromText(text);
+    console.log("result", result.questions);
+    console.log("result", result.questions.length);
+    // Fetch the Paper and Lesson documents
+    const paper = await Paper.findById(paperId).exec();
+
+    let count = 1;
+    for (const question of result?.questions) {
+      const lesson = await Lesson.findOne({ lesson: question?.lesson }).exec();
+
+      console.log("lesson", lesson)
+
+      const obj = {
+        no: count,
+        type: QUESTION_TYPES.MCQ,
+        question: question?.question || "",
+        options: question?.answerOptions || [],
+        answer: question?.answer || [],
+        difficulty: question?.difficulty || QUESTION_DIFFICULTY_TYPES.MEDIUM,
+        paper,
+        lesson
+      };
+      console.log("obj", obj);
+      const newQuestion = new Question(obj);
+      await newQuestion.save();
+
+      count++;
+    }
+
+    return {
+      noOfQuestions: count
+    }
+
   }
 
   async findAll(query) {
@@ -47,6 +108,23 @@ class QuestionService {
     })
       .sort({ no: 1 })
       .select("-__v -createdAt -updatedAt -answer")
+      .exec();
+
+    return { paper, questions };
+  }
+
+  async getAllQuestionsAndAnswersByPaperId(paperId) {
+    const paper = await Paper.findOne({
+      _id: paperId,
+    })
+      .select("-__v -createdAt -updatedAt")
+      .exec();
+
+    const questions = await Question.find({
+      paper: paperId,
+    })
+      .sort({ no: 1 })
+      .select("-__v -createdAt -updatedAt")
       .exec();
 
     return { paper, questions };
