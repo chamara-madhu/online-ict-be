@@ -5,6 +5,8 @@ const {
   findOne,
   update,
   remove,
+  getAllQuestionsAndAnswersByPaperId,
+  scan,
 } = require("../services/question.service");
 const { validateQuestion } = require("../validators/question.validator");
 
@@ -25,6 +27,56 @@ exports.create = async (req, res) => {
   }
 };
 
+// scan question
+exports.scan = async (req, res) => {
+  try {
+    const file = req.file; // the file is in memory as a Buffer
+    const buffer = file.buffer; // <-- this is your file content
+    const {paperId} = req.body;
+  
+    // Example: log the file type and size
+    console.log("MIME type:", file.mimetype);
+    console.log("Size:", file.size);
+    console.log("Buffer:", buffer);
+    
+
+    // const { isValid, errors } = validateQuestion(req.body);
+
+    // If validation fails, return a 400 error
+    // if (!isValid) {
+    //   return res.status(400).json({ message: "Validation failed", errors });
+    // }
+
+    const result = await scan(paperId, file);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// async businessCardScan(file: Express.Multer.File) {
+//   try {
+//     if (!file) {
+//       throw new Error('No file uploaded');
+//     }
+
+//     // Convert image to Base64 (no need for fs.readFileSync since file is in memory)
+//     const base64Image = file.buffer.toString('base64'); // Directly use file.buffer
+
+//     // Call AI service to extract business card data
+//     const extractedData = await this.aiService.extractDataFromBusinessCard(
+//       base64Image,
+//     );
+
+//     console.log({ extractedData });
+
+//     return { success: true, data: extractedData };
+//   } catch (error) {
+//     console.error('Error processing business card:', error);
+//     return { success: false, error: 'Failed to process business card' };
+//   }
+// }
+
 // Find all questions with optional query parameters
 exports.findAll = async (req, res) => {
   try {
@@ -41,6 +93,17 @@ exports.getAllQuestionsByPaperId = async (req, res) => {
   try {
     const paperId = req.params.paperId;
     const questions = await getAllQuestionsByPaperId(paperId);
+    res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get all questions and answers by paper ID
+exports.getAllQuestionsAndAnswersByPaperId = async (req, res) => {
+  try {
+    const paperId = req.params.paperId;
+    const questions = await getAllQuestionsAndAnswersByPaperId(paperId);
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json({ message: error.message });

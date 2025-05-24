@@ -4,15 +4,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
-const mongoUrl = process.env.MONGO_CONNECTION_STRING;
-
 // app
 const app = express();
 
 // connect database
 mongoose
-  .connect(mongoUrl)
-  // .connect("mongodb://127.0.0.1:27017/online_ict")
+  .connect(process.env.MONGO_CONNECTION_STRING)
   .then(() => console.log("db is running"))
   .catch((err) => console.log(err));
 
