@@ -16,12 +16,13 @@ class PaperService {
   }
 
   async findAll(query) {
-    const { exam, medium, type } = query;
+    const { exam, medium, type, isApproved } = query;
 
     const filter = {};
     if (exam) filter.exam = exam;
     if (medium) filter.medium = medium;
     if (type) filter.type = type;
+    if (isApproved) filter.isApproved = "Yes";
 
     const papers = await Paper.find(filter)
       .sort({ year: -1 })
@@ -46,7 +47,19 @@ class PaperService {
     await Paper.findByIdAndDelete(id).exec();
   }
 
-  async markPaper(paperId, userId, answers) {
+  async paperApproval(id, isApproved) {
+    await Paper.findByIdAndUpdate(
+      id,
+      {
+        isApproved,
+      },
+      {
+        new: true,
+      }
+    ).exec();
+  }
+
+  async markPaper(paperId, userId, answers, timeSpent) {
     // Fetch the questions for the paper
     const questions = await Question.find({
       paper: paperId,
@@ -91,6 +104,7 @@ class PaperService {
       marks: percentage,
       medal,
       answers,
+      timeSpent,
     });
 
     const res = await mark.save();

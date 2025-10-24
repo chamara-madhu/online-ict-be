@@ -6,6 +6,7 @@ const {
   remove,
   markPaper,
   checkEligibility,
+  paperApproval,
 } = require("../services/paper.service");
 const { validatePaper } = require("../validators/paper.validator");
 
@@ -29,8 +30,8 @@ exports.create = async (req, res) => {
 // Find all papers with optional query parameters
 exports.findAll = async (req, res) => {
   try {
-    const { exam, medium, type } = req.query;
-    const papers = await findAll({ exam, medium, type });
+    const { exam, medium, type, isApproved } = req.query;
+    const papers = await findAll({ exam, medium, type, isApproved });
     res.status(200).json(papers);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -74,13 +75,26 @@ exports.remove = async (req, res) => {
   }
 };
 
+// Status approval
+exports.paperApproval = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const isApproved = req.body.isApproved;
+    await paperApproval(id, isApproved);
+    res.status(200).json({ message: "Status changed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Mark the paper
 exports.markPaper = async (req, res) => {
   try {
     const paperId = req.params.paperId;
     const answers = req.body.answers;
+    const timeSpent = req.body.timeSpent;
 
-    const questions = await markPaper(paperId, req.user.id, answers);
+    const questions = await markPaper(paperId, req.user.id, answers, timeSpent);
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json({ message: error.message });

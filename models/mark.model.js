@@ -22,6 +22,10 @@ const markSchema = mongoose.Schema(
       type: [[Number]],
       required: true,
     },
+    timeSpent: {
+      type: Number,
+      required: true,
+    },
     paper: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Paper",

@@ -1,8 +1,8 @@
 const Mark = require("../models/mark.model");
 
 class MarkService {
-  async create(createMarkDto) {
-    const mark = new Mark(createMarkDto);
+  async create(data) {
+    const mark = new Mark(data);
     return await mark.save();
   }
 

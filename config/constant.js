@@ -17,6 +17,7 @@ exports.EXAM_TYPES = {
 exports.MEDIUM_TYPES = {
   ENGLISH: "English",
   SINHALA: "Sinhala",
+  TAMIL: "Tamil",
 };
 
 // paper types
@@ -62,7 +63,7 @@ exports.MEDALS = {
 // is approved
 exports.IS_APPROVED_TYPES = {
   YES: "Yes",
-  NO: "No"
+  NO: "No",
 };
 
 exports.PRICE_PER_PAPER = 200;

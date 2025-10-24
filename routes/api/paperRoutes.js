@@ -18,6 +18,9 @@ router.get("/:id", paperController.findOne);
 // Route to delete a paper
 router.delete("/:id", isAuth, isAdmin, paperController.remove);
 
+// paper status approval
+router.put("/:id/approval", isAuth, isAdmin, paperController.paperApproval);
+
 // Route to mark a paper (student action)
 router.post("/marks/:paperId", isAuth, isStudent, paperController.markPaper);
 

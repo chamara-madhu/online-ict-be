@@ -9,8 +9,6 @@ const { isAuth, isAdmin } = require("../../auth-middleware/check");
 // Route to create a new question
 router.post("/", isAuth, isAdmin, questionController.create);
 
-router.post("/scan", isAuth, isAdmin, upload.single("file"), questionController.scan);
-
 // Route to update an existing question
 router.put("/:id", isAuth, isAdmin, questionController.update);
 
@@ -31,5 +29,18 @@ router.get(
 
 // Route to delete a question
 router.delete("/:id", isAuth, isAdmin, questionController.remove);
+
+// question status approval
+router.put("/:id/approval", isAuth, isAdmin, questionController.questionApproval);
+
+// Extract past paper questions
+router.post("/scan", isAuth, isAdmin, upload.single("file"), questionController.scan);
+
+// Extract past paper questions
+router.post("/model/paper", isAuth, isAdmin, questionController.generateModelPaper);
+
+// Lesson stats
+router.get("/lesson/stats/:paperId", isAuth, isAdmin, questionController.getLessonStatsByPaperId);
+
 
 module.exports = router;

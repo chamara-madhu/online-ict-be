@@ -42,6 +42,9 @@ const questionSchema = mongoose.Schema(
       default: QUESTION_DIFFICULTY_TYPES.MEDIUM,
       required: true,
     },
+    answerClarification: {
+      type: String,
+    },
     paper: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Paper",

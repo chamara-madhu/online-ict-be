@@ -7,6 +7,9 @@ const {
   remove,
   getAllQuestionsAndAnswersByPaperId,
   scan,
+  generateModelPaper,
+  getLessonStatsByPaperId,
+  questionApproval,
 } = require("../services/question.service");
 const { validateQuestion } = require("../validators/question.validator");
 
@@ -26,56 +29,6 @@ exports.create = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-// scan question
-exports.scan = async (req, res) => {
-  try {
-    const file = req.file; // the file is in memory as a Buffer
-    const buffer = file.buffer; // <-- this is your file content
-    const {paperId} = req.body;
-  
-    // Example: log the file type and size
-    console.log("MIME type:", file.mimetype);
-    console.log("Size:", file.size);
-    console.log("Buffer:", buffer);
-    
-
-    // const { isValid, errors } = validateQuestion(req.body);
-
-    // If validation fails, return a 400 error
-    // if (!isValid) {
-    //   return res.status(400).json({ message: "Validation failed", errors });
-    // }
-
-    const result = await scan(paperId, file);
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// async businessCardScan(file: Express.Multer.File) {
-//   try {
-//     if (!file) {
-//       throw new Error('No file uploaded');
-//     }
-
-//     // Convert image to Base64 (no need for fs.readFileSync since file is in memory)
-//     const base64Image = file.buffer.toString('base64'); // Directly use file.buffer
-
-//     // Call AI service to extract business card data
-//     const extractedData = await this.aiService.extractDataFromBusinessCard(
-//       base64Image,
-//     );
-
-//     console.log({ extractedData });
-
-//     return { success: true, data: extractedData };
-//   } catch (error) {
-//     console.error('Error processing business card:', error);
-//     return { success: false, error: 'Failed to process business card' };
-//   }
-// }
 
 // Find all questions with optional query parameters
 exports.findAll = async (req, res) => {
@@ -141,7 +94,67 @@ exports.remove = async (req, res) => {
   try {
     const id = req.params.id;
     await remove(id);
-    res.status(204).send();
+    res.status(204).json({ message: "Deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Status approval
+exports.questionApproval = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const isApproved = req.body.isApproved;
+    await questionApproval(id, isApproved);
+    res.status(200).json({ message: "Status changed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// scan question
+exports.scan = async (req, res) => {
+  try {
+    const file = req.file; // the file is in memory as a Buffer
+    const buffer = file.buffer; // <-- this is your file content
+    const { paperId } = req.body;
+
+    // Example: log the file type and size
+    console.log("MIME type:", file.mimetype);
+    console.log("Size:", file.size);
+    console.log("Buffer:", buffer);
+
+    // const { isValid, errors } = validateQuestion(req.body);
+
+    // If validation fails, return a 400 error
+    // if (!isValid) {
+    //   return res.status(400).json({ message: "Validation failed", errors });
+    // }
+
+    const result = await scan(paperId, file);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// generateModelPaper question
+exports.generateModelPaper = async (req, res) => {
+  try {
+    const { paperId } = req.body;
+    const result = await generateModelPaper(paperId);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// getLessonStatsByPaperId question
+exports.getLessonStatsByPaperId = async (req, res) => {
+  try {
+    const paperId = req.params.paperId;
+    const result = await getLessonStatsByPaperId(paperId);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
